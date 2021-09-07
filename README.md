@@ -20,7 +20,7 @@ docker build -t freeradius-alpine .
 ### Generate certificates (example client name: johndoe)
 You can specify as many clients as you want (re-run this command each time, replacing word "johndoe" with any client names you like):
 ```
-docker run -it -v pki:/easyrsa/pki --digest=sha1 easyrsa build-client-full johndoe
+docker run -it -v pki:/easyrsa/pki easyrsa --digest=sha1 build-client-full johndoe
 ```
 where *--digest=X* sets req/cert signing. X Options: md5, sha1, sha256, sha224, sha384, sha512
 
