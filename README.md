@@ -1,5 +1,11 @@
 # FreeRadius over alpine:edge with EAP-TLS (freeradius-alpine)
 
+## Steps to set up Router
+Select the WPA2-Enterprise in your Router Wireless Security. Take into account the Radius Server IP (where the RADIUS server will be running) and the Radius Password. E.g., the Radius Password in this case is **radiuspass**, and the Server IP is **192.168.1.100**:
+![](imgs/RouterSetup.png)
+
+Make sure that the Radius Server is set with the correct IP.
+
 ## Steps to build container
 
 ### Build EasyRSA container (for certificate generation)
@@ -31,25 +37,25 @@ CID=$(docker run -d -v pki:/easyrsa/ freeradius-alpine:latest)
 docker cp $CID:/easyrsa ./certsdir
 ```
 
-Inside data you will find the certificates generated before.
+Inside certsdir you will find the certificates generated before.
 
 ### Running freshly-built docker container (in visible mode)
+
+* **CLIENT_ADDRESS** is based on the AP Address
+* **PRIVATE_KEY_PASSWORD** is based on provided key when certificates were generated.
+
+* **CLIENT_SECRET** in this case would be **radiuspass**
 ```
-sudo docker run -it -p 1812:1812/udp --restart=always -v pki:/etc/raddb/certs -e CLIENT_ADDRESS=192.168.1.1 -e CLIENT_SECRET=password -e PRIVATE_KEY_PASSWORD=password freeradius-alpine:latest
+sudo docker run -it -p 1812:1812/udp --restart=always -v pki:/etc/raddb/certs -e CLIENT_ADDRESS=192.168.1.1 -e CLIENT_SECRET=radiuspass -e PRIVATE_KEY_PASSWORD=password freeradius-alpine:latest
 ```
 
 Replace "-it" flag with "-d" to daemonize the process to background.
 Replace CLIENT_ADDRESS with wifi-hotspot address, as long as CLIENT_SECRET and PRIVATE_KEY_PASSWORD with according values.
 
-<!-- ### Client configuration
+### Client configuration
 Now you can configure your AP with WPA2 Enterprise, AES, the server IP and client secret.
 Use two certificates along with user private key to authenticate against freeradius tls.
 Here's how you can do it for example:
-![img](https://github.com/sxiii/fralp/raw/master/freeradius-auth.png)
+![](imgs/CPUAuthentication.png)
 
-### Windows and other P12 client configuration
-If you need a P12-type certificate (for example, to import it on windows), you can use openssl to convert your results to it like this:
-```
-openssl pkcs12 -export -out certificate.pfx -inkey johndoe.key -in johndoe.crt -certfile ca.crt
-```
-Be sure to state all 3 files correctly and you'll get "certificate.pfx" as output that you'll be able to use on windows and other OSes. -->
+*NOTE:* The password is not necessarily the same as **PRIVATE_KEY_PASSWORD**.
