@@ -18,10 +18,13 @@ docker build easyrsa -t easyrsa
 docker build -t freeradius-alpine .
 ```
 ### Generate certificates (example client name: johndoe)
-You can specify as many clients as you want (re-run this command each time, replacing word "johndoe" with any client names you like).
+You can specify as many clients as you want (re-run this command each time, replacing word "johndoe" with any client names you like):
 ```
-docker run -it -v pki:/easyrsa/pki easyrsa build-client-full johndoe
+docker run -it -v pki:/easyrsa/pki --digest=sha1 easyrsa build-client-full johndoe
 ```
+where *--digest=X* sets req/cert signing. X Options: md5, sha1, sha256, sha224, sha384, sha512
+
+*NOTE:* CA and server certs signing can be modified in **easyrsa/entrypoint.sh** (default=sha1)
 
 After generating certificates and private keys, you need to copy them manually from a "pki" docker volume to your client machine (total of 3 files):
 * ca.crt (Central Authority Certificate)
