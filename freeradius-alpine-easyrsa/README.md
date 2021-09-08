@@ -1,10 +1,4 @@
-# FreeRadius over alpine:edge with EAP-TLS (freeradius-alpine)
-
-## Steps to configure the AP
-Select the WPA2-Enterprise in your AP Wireless Security. Take into account the Radius Server IP (where the RADIUS server will be running) and the Radius Password. E.g., the Radius Password in this case is **radiuspass**, and the Server IP is **192.168.1.100**:
-![](imgs/APSetup.png)
-
-Make sure that the Radius Server is set with the correct IP.
+# FreeRadius over alpine:edge with EAP-TLS using Easy-RSA (freeradius-alpine-easyrsa)
 
 ## Steps to build container
 
@@ -13,9 +7,9 @@ Make sure that the Radius Server is set with the correct IP.
 docker build easyrsa -t easyrsa
 ```
 
-### Build freeradius-alpine docker container
+### Build freeradius-alpine-easyrsa docker container
 ```
-docker build -t freeradius-alpine .
+docker build -t freeradius-alpine-easyrsa .
 ```
 ### Generate certificates (example client name: johndoe)
 You can specify as many clients as you want (re-run this command each time, replacing word "johndoe" with any client names you like):
@@ -34,7 +28,7 @@ The files inside PKI docker volume can be located by navigating to /easyrsa/pki 
 
 E.g.:
 ```
-CID=$(docker run -d -v pki:/easyrsa/ freeradius-alpine:latest)
+CID=$(docker run -d -v pki:/easyrsa/ freeradius-alpine-easyrsa:latest)
 ```
 ```
 docker cp $CID:/easyrsa ../certsdir
@@ -49,16 +43,8 @@ Inside certsdir you will find the certificates generated before.
 
 * **CLIENT_SECRET** in this case would be **radiuspass**
 ```
-sudo docker run -it -p 1812:1812/udp --restart=always -v pki:/etc/raddb/certs -e CLIENT_ADDRESS=192.168.1.1 -e CLIENT_SECRET=radiuspass -e PRIVATE_KEY_PASSWORD=password freeradius-alpine:latest
+sudo docker run -it -p 1812:1812/udp --restart=always -v pki:/etc/raddb/certs -e CLIENT_ADDRESS=192.168.1.1 -e CLIENT_SECRET=radiuspass -e PRIVATE_KEY_PASSWORD=password freeradius-alpine-easyrsa:latest
 ```
 
 Replace "-it" flag with "-d" to daemonize the process to background.
 Replace CLIENT_ADDRESS with wifi-hotspot address, as long as CLIENT_SECRET and PRIVATE_KEY_PASSWORD with according values.
-
-### Client configuration
-Now you can configure your AP with WPA2 Enterprise, AES, the server IP and client secret.
-Use two certificates along with user private key to authenticate against freeradius tls.
-Here's how you can do it for example:
-![](imgs/CPUAuthentication.png)
-
-*NOTE:* The password is not necessarily the same as **PRIVATE_KEY_PASSWORD**. Also, **CA certificate is not necessary!!!!**
