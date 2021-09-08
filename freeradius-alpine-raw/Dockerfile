@@ -1,0 +1,26 @@
+FROM alpine:edge
+
+RUN apk add --no-cache freeradius freeradius-eap openssl
+
+ENV PRIVATE_CERT=server.crt PRIVATE_KEY=server.key \
+    CA_CERT=ca.pem DH_FILE=dh
+
+COPY radiusd.conf clients.conf /etc/raddb/
+COPY eap /etc/raddb/mods-available
+COPY site /etc/raddb/sites-available
+
+RUN rm /etc/raddb/sites-enabled/* && \
+    rm -rf /etc/raddb/certs && \
+    ln -s /etc/raddb/sites-available/site /etc/raddb/sites-enabled/site && \
+    mkdir /tmp/radiusd && \
+    chown radius:radius /tmp/radiusd
+
+COPY certs /etc/raddb/certs/
+
+RUN chgrp -R radius /etc/raddb/
+
+EXPOSE 1812/udp
+USER radius
+
+ENTRYPOINT ["/usr/sbin/radiusd"]
+CMD ["-X", "-f"]
