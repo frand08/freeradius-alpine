@@ -16,7 +16,7 @@ docker build -t freeradius-alpine-raw .
 
 * **CLIENT_SECRET** in this case would be **radiuspass**
 ```
-sudo docker run -it -p 1812:1812/udp --restart=always -v pki:/etc/raddb/certs -e CLIENT_ADDRESS=192.168.1.1 -e CLIENT_SECRET=radiuspass -e PRIVATE_KEY_PASSWORD=password freeradius-alpine-easyrsa:latest
+sudo docker run -it -p 1812:1812/udp --restart=always -v pki:/etc/raddb/certs -e CLIENT_ADDRESS=192.168.1.1 -e CLIENT_SECRET=radiuspass -e PRIVATE_KEY_PASSWORD=password freeradius-alpine-raw:latest
 ```
 
 Replace "-it" flag with "-d" to daemonize the process to background.
