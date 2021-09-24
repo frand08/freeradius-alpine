@@ -1,0 +1,3 @@
+[submodule "freeradius-alpine-raw/mbedtls-certs/mbedtls"]
+	path = freeradius-alpine-raw/mbedtls-certs/mbedtls
+	url = https://github.com/frand08/mbedtls
