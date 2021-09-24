@@ -1,4 +1,4 @@
-# FreeRadius over alpine:edge with EAP-TLS using Easy-RSA (freeradius-alpine-easyrsa)
+# FreeRadius over alpine:edge with EAP-TLS
 
 ## Steps to configure the AP
 Select the WPA2-Enterprise in your AP Wireless Security. Take into account the Radius Server IP (where the RADIUS server will be running) and the Radius Password. E.g., the Radius Password in this case is **radiuspass**, and the Server IP is **192.168.1.100**:
