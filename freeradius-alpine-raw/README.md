@@ -21,3 +21,9 @@ sudo docker run -it -p 1812:1812/udp --restart=always -v pki:/etc/raddb/certs -e
 
 Replace "-it" flag with "-d" to daemonize the process to background.
 Replace CLIENT_ADDRESS with wifi-hotspot address, as long as CLIENT_SECRET and PRIVATE_KEY_PASSWORD with according values.
+
+# Known Issues
+- Sometimes the FreeRADIUS is not initialized properly, even though the same steps are followed, giving a connection rejection like the following
+```
+Ignoring request to auth address * port 1812 bound to server site from unknown client 172.17.0.1 port 46952 proto udp
+```
