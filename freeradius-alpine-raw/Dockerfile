@@ -2,8 +2,8 @@ FROM alpine:edge
 
 RUN apk add --no-cache freeradius freeradius-eap openssl
 
-ENV PRIVATE_CERT=server.crt PRIVATE_KEY=server.key \
-    CA_CERT=ca.pem DH_FILE=dh
+ENV PRIVATE_CERT=wpa2_server.crt PRIVATE_KEY=wpa2_server.key \
+    CA_CERT=wpa2_ca.pem DH_FILE=wpa2_dh.pem
 
 COPY radiusd.conf clients.conf /etc/raddb/
 COPY eap /etc/raddb/mods-available
