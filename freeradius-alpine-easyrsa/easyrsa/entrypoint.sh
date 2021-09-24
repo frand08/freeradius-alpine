@@ -10,8 +10,8 @@ set -u
 [ ! -d pki/reqs ] && mkdir pki/reqs
 
 [ ! -f pki/dh.pem ] && ./easyrsa gen-dh
-[ ! -f pki/ca.crt ] && ./easyrsa --digest=sha1 build-ca
-[ ! -f pki/private/server.key ] && ./easyrsa --digest=sha1 build-server-full server
+[ ! -f pki/ca.crt ] && ./easyrsa --digest=sha256 build-ca nopass
+[ ! -f pki/private/server.key ] && ./easyrsa --digest=sha256 build-server-full server
 
 ./easyrsa $@
 
